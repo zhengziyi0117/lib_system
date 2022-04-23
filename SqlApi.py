@@ -12,7 +12,7 @@ class SqlApi(object):
         '''
         connect mysql and create cursor to execute sql
         '''
-        # 数据库连接
+        # 数据库连接,根据本地mysql数据库实际修改
         self.db = pymysql.connect(host="localhost", user="root", passwd="1111", database="libarary_system")
         # 创建游标对象,给后面方法使用
         self.cursor = self.db.cursor()
@@ -125,7 +125,7 @@ class SqlApi(object):
 
     
 
-
-sqlApi = SqlApi()
-print(sqlApi.return_book("小芳"))
-sqlApi.close()
+# 调用示例,注意调用完后调用close方法关闭连接
+# sqlApi = SqlApi()
+# print(sqlApi.return_book("小芳"))
+# sqlApi.close()
