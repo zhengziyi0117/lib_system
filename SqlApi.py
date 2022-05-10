@@ -53,17 +53,17 @@ class SqlApi(object):
             except IndexError:
                 print("不存在该书")
 
-    def register(self, username: str):
+    def register(self, name: str):
         """
         register
 
         You must register before borrow books
         """
-        person = self.cursor.execute("SELECT count(*) FROM `user` WHERE `username` = {}".format(username))
+        person = self.cursor.execute("SELECT count(*) FROM `user` WHERE `username` = '{}'".format(name))
         if person:
             print("您已注册")
         else:
-            self.cursor.execute("INSERT INTO `user` (`username`, `bookid`) VALUES ({}, 1)".format(username))
+            self.cursor.execute("INSERT INTO `user` (`username`, `bookid`) VALUES ('{}', 1)".format(name))
             print("注册成功")
 
     def query_books(self, bookname: str):
@@ -73,7 +73,7 @@ class SqlApi(object):
         :param: - bookname part of the book's name that you want to search
         :return: a book tuple (tuple[tuple[Any, ...], ...]) that contains bookname and bookid
         """
-        if bookname == None:
+        if bookname is None:
             print("书名不能为空")
         # 预防sql注入
         if "--" in bookname or "or" in bookname:
@@ -142,6 +142,5 @@ class SqlApi(object):
 # sqlApi = SqlApi()
 # sqlApi.return_book("小芳")
 # sqlApi.close()
-
 
 
