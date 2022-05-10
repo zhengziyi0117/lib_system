@@ -59,11 +59,12 @@ class SqlApi(object):
 
         You must register before borrow books
         """
-        person = self.cursor.execute("SELECT count(*) FROM `user` WHERE `username` = '{}'".format(name))
+        person = self.__select_bookid_by_username(name)
         if person:
             print("您已注册")
         else:
-            self.cursor.execute("INSERT INTO `user` (`username`, `bookid`) VALUES ('{}', 1)".format(name))
+            self.cursor.execute("INSERT INTO `user` (`username`) VALUES ('{}')".format(name))
+            self.db.commit()
             print("注册成功")
 
     def query_books(self, bookname: str):
@@ -143,4 +144,6 @@ class SqlApi(object):
 # sqlApi.return_book("小芳")
 # sqlApi.close()
 
-
+if __name__ == "__main__":
+    sqlApi = SqlApi()
+    sqlApi.register("小黄")
