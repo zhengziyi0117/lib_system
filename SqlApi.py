@@ -82,7 +82,7 @@ class SqlApi(object):
         books = self.cursor.fetchall()
         if len(books) == 0:
             print("抱歉为找到您想要的书")
-        return books
+        print(books)
 
     def borrow_book(self, username: str, bookid: int):
         """
@@ -93,28 +93,28 @@ class SqlApi(object):
         """
         # 预防sql注入
         if not isinstance(bookid, int):
-            return "请输入一个int"
+            print("请输入一个int")
         # 预防sql注入
         if "--" in username or "or" in username:
-            return "请重新输入"
+            print("请重新输入")
         book_num = self.__select_book_num_by_bookid(bookid)
         person_num = self.__select_person_num_by_bookid(bookid)
         bookid_person_has = self.__select_bookid_by_username(username)
 
         if bookid_person_has and bookid_person_has > 1:
-            return "一个人只能借一本书哦"
+            print("一个人只能借一本书哦")
         if not book_num or bookid == 1:
-            return "输入bookid不存在,请重新输入"
+            print("输入bookid不存在,请重新输入")
         if person_num:
-            return "抱歉该书已被他人借走"
+            print("抱歉该书已被他人借走")
         else:
             self.cursor.execute("UPDATE `user` SET `bookid` = {} WHERE `username` = '{}'".format(bookid, username))
             self.db.commit()
             book = self.__select_bookid_by_username(username)
             if book != 1:
-                return "借书成功,请30天内归还"
+                print("借书成功,请30天内归还")
             else:
-                return "借书失败,请联系管理员"
+                print("借书失败,请联系管理员")
 
     def return_book(self, username: str):
         """
@@ -124,14 +124,14 @@ class SqlApi(object):
         """
         # 预防sql注入
         if "--" in username or "or" in username:
-            return "请重新输入"
+            print("请重新输入")
 
         self.cursor.execute("UPDATE `user` SET `bookid` = 1 WHERE username = '{}'".format(username))
         self.db.commit()
         if self.__select_bookid_by_username(username) == 1:
-            return "还书成功"
+            print("还书成功")
         else:
-            return "还书失败,请联系管理员"
+            print("还书失败,请联系管理员")
 
     def close(self):
         self.cursor.close()
@@ -140,7 +140,7 @@ class SqlApi(object):
 
 # 调用示例,注意调用完后调用close方法关闭连接
 # sqlApi = SqlApi()
-# print(sqlApi.return_book("小芳"))
+# sqlApi.return_book("小芳")
 # sqlApi.close()
 
 
