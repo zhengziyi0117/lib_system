@@ -8,7 +8,7 @@ class SqlApi(object):
     """
     a class provides apis to gui
     """
-
+    
     def __init__(self) -> None:
         """
         connect mysql and create cursor to execute sql
@@ -134,6 +134,13 @@ class SqlApi(object):
         else:
             print("还书失败,请联系管理员")
 
+    def list_all_books():
+        num=input("输入查询页数:")
+        num*=15
+        self.cursor.execute("select * from `books` limit 15 offect {} ".format(num))
+        books = self.cursor.fetchall()
+        print(books)
+
     def close(self):
         self.cursor.close()
         self.db.close()
@@ -147,3 +154,4 @@ class SqlApi(object):
 if __name__ == "__main__":
     sqlApi = SqlApi()
     sqlApi.register("小黄")
+    
